@@ -19,21 +19,68 @@ const easy = [
   var disableSelect;
 
   window.onload = function(){
-	  //run when new gaem buttom is clicked 
+	  //run when new game buttom is clicked 
 	  id("start-btn").addEventListener("click", startGame);
   }
 
   function startGame(){
 	  //Chose difficulty
 	  let board;
-	  if (id("diff-1").checked) board = easy[0];
+	  if((id("diff-1").checked == false) && (id("diff-2").checked == false) && (id("diff-3").checked == false)){
+		  alert("Chose a difficulty level");
+	  } 
+	  else if (id("diff-1").checked) board = easy[0];
 	  else if(id("diff-2").checked) board = medium[0];
 	  else board = hard[0];
+	  
 
 	  disableSelect = false;
 
 	  //create board
 	  generateBoard(board);
+
+	  //starts timer
+	  if(id("time-4").checked == false)
+	  startTimer();
+
+	  //sets theme based on input
+	  if((id("theme-1").checked == false) && (id("theme-2").checked == false)){
+		  qs("body").classList.remove("dark");
+	  }else{
+	  if(id("theme-1").checked){
+		  qs("body").classList.remove("dark");
+	  }
+	  else{
+		  qs("body").classList.add("dark");
+	  }
+	}
+  }
+
+  function startTimer(){
+	  //sets time remaining based on input
+	  if(id("time-1").checked) timereamaining = 180;
+	  else if(id("time-2").checked) timereamaining = 300;
+	  else timereamaining = 600;
+
+	  //sets timer for the first second
+	  id("timer").textContent = timeConversion(timereamaining);
+
+	  //sets timer to update every second
+	  timer = setInterval(function(){
+		  timereamaining--;
+		  //if no time remaining
+		  if(timereamaining == 0) endGame();
+		  id("timer").textContent = timeConversion(timereamaining);
+	  },1000)
+  }
+
+  //converts seconds into string of mm:ss format
+  function timeConversion(time){
+	  let minutes = Math.floor(time/60);
+	  if(minutes < 10) minutes = "0" + minutes;
+	  let seconds = time % 60;
+	  if(seconds < 10) seconds = "0" + seconds;
+	  return minutes + ":" + seconds;
   }
 
   function generateBoard(board){
@@ -50,8 +97,30 @@ const easy = [
 			  tile.textContent = board.charAt(i);
 		  } else{
 			  //Add click event listener to tile
+			  tile.addEventListener("click",function(){
+				 //if selecting is not disabled
+				 if(!disableSelect){
+					 //if the tile is already selected
+					 if(tile.classList.contains("selected")){
+						 //then remove selection
+						 tile.classList.remove("selected");
+						 selectedTile = null;
+					 }
+					 else{
+						 //deselect all selected tiles
+						 for(let i=0;i<81; i++){
+							 qsa(".tile")[i].classList.remove("selected");
+						 }
+						 
+						 //add selection and update variable
+						 tile.classList.add("selected");
+						 selectedTile = tile;
+						 updateMove();
+					 }
+				 }
+			  });
 		  }
-		  //Asign tile id
+		  //Assign tile id
 		  tile.id = idCount;
 		  //Increment for next tile
 		  idCount++;
@@ -82,6 +151,22 @@ const easy = [
 
 	  //Clear selected variables
 	  selectedTile = null;
+  }
+
+  function updateMove(){
+
+  }
+
+  function endGame()
+  {
+	  //Disable moves and stop timer
+	  disableSelect = true;
+	  clearTimeout(timer);
+
+	  //Display player lost
+	  if(timereamaining == 0)
+	  alert("you lost!");
+	  //id("timer").textContent = "You lost !";
   }
 
    //Helper functions
