@@ -1,4 +1,4 @@
- const easy = [
+const easy = [
 	"6------7------5-2------1---362----81--96-----71--9-4-5-2---651---78----345-------",
 	"685329174971485326234761859362574981549618732718293465823946517197852643456137298"
   ];
@@ -17,6 +17,14 @@
   var selectedNum;
   var selectedTile;
   var disableSelect;
+
+  //stopwatch variables
+  let h =0;
+  let m = 0;
+  let s = 0;
+  let ms = 0;
+  let st;
+
 
   window.onload = function(){
 	  //run when new game buttom is clicked 
@@ -66,8 +74,17 @@
 	  generateBoard(board);
 
 	  //starts timer
-	  if(id("time-4").checked == false)
-	  startTimer();
+      if(id("time-4").checked){
+          id("timer").classList.add("hidden");
+          clearTimeout(st);
+          startClock();
+      }
+      else
+	  {
+          id("displayTime").classList.add("hidden");
+          clearTimeout(st);
+          startTimer();
+      }
 
 	  //sets theme based on input
 	  if((id("theme-1").checked == false) && (id("theme-2").checked == false)){
@@ -86,7 +103,9 @@
   }
 
   function startTimer(){
-	  //sets time remaining based on input
+      //sets time remaining based on input
+      id("timer").classList.remove("hidden");
+      
 	  if(id("time-1").checked) timereamaining = 180;
 	  else if(id("time-2").checked) timereamaining = 300;
 	  else timereamaining = 600;
@@ -174,12 +193,20 @@
 
 		  //if number matches the solution key
 		  if(checkCorrect(selectedTile)){
-			  //deselect the tiles
-			  var oldTile;
-			  //oldTile = selectedTile;
+              //deselect the tiles
+              disableSelect = true;
+              selectedTile.classList.add("correct");
+
+             // let oldTile = selectedTile;
+              //selectedTile.classList.add("correct");
+
+              setTimeout(function(){
+                  disableSelect = false;
+              selectedTile.classList.remove("correct");
 			  selectedTile.classList.remove("selecetd");
-			  selectedNum.classList.remove("selected");
-			  selectedTile.classList.add("correct");
+              selectedNum.classList.remove("selected");
+              selectedTile.classList.add("correctTile")
+			  
 			  
 			  
 			  
@@ -187,8 +214,8 @@
 			  //clear the selected variables
 			  selectedNum = null;
 			  selectedTile = null;
-
-			  oldTile.classList.add("correctTile");
+              },1000);
+			  
 
 			  //check is user is done
 			   if(checkDone(selectedTile))
@@ -268,7 +295,14 @@
 	  //Display player lost
 	  if(timereamaining == 0)
 	  alert("you lost!");
-	  else alert("you won!");
+      else if(id("time-4").checked)
+      {
+          //setTimeout();
+          alert("You won! Finished board in "+h+" hours "+m+" minutes and "+s+" seconds!");
+      }
+      else alert("You won!");
+          
+      
 	  //id("timer").textContent = "You lost !";
   }
 
@@ -278,6 +312,34 @@
 		  if(tiles[i].textContent === "") return false;
 	  }
 	  return true;
+  }
+
+  function startClock(){
+    id("displayTime").classList.remove("hidden");
+    id("displayTime").textContent = "00:00:00";
+    st = setInterval(clock,1000);
+  }
+
+  function clock(){
+     
+      id("displayTime").textContent = (h<10?"0"+h:h) + ":"+(m<10?"0"+m:m)+":" +(s<10?"0"+s:s);
+      s++;
+      if(s==59){
+          s=0;
+          m++;
+      }
+      if(m==59){
+          m=0;
+          h++;
+      }
+  }
+
+  function resetClock()
+  {
+      h=0;
+      m=0;
+      s=0;
+      id("displayTime").textContent = (h<10?"0"+h:h) + ":"+(m<10?"0"+m:m)+":" +(s<10?"0"+s:s);
   }
 
    //Helper functions

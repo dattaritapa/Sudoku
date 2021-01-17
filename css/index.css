@@ -68,6 +68,13 @@ p#timer{
     height: 600px;
 }
 
+
+#displayTime{
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+}
+
 .tile{
     border: 1px solid black;
     width: 60px;
@@ -92,4 +99,14 @@ p.incorrect{
 
 .bottomBorder{
     border-bottom: 4px solid black;
+}
+
+.correct{
+    color: darkgreen;
+}
+
+.correctTile{
+    
+    background-color: yellowgreen;
+    color: black;
 }
