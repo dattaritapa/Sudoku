@@ -1,3 +1,7 @@
+.hidden{
+    display: none;
+}
+
 body.dark{
     background-color: #333333;
     color: whitesmoke;
@@ -39,6 +43,18 @@ p#timer{
 #game{
     display: flex;
     justify-content: center;
+}
+
+#number-container > p{
+    border: 1px solid black;
+    border-radius: 20px;
+    width: 60px;
+    height: 60px;
+    font-size: 30pt;
+    margin-left: 50px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    text-align: center;
 }
 
 #board{

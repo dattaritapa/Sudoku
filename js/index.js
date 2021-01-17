@@ -1,4 +1,4 @@
-const easy = [
+ const easy = [
 	"6------7------5-2------1---362----81--96-----71--9-4-5-2---651---78----345-------",
 	"685329174971485326234761859362574981549618732718293465823946517197852643456137298"
   ];
@@ -21,6 +21,32 @@ const easy = [
   window.onload = function(){
 	  //run when new game buttom is clicked 
 	  id("start-btn").addEventListener("click", startGame);
+
+	  //add event listener to the numbers and the number container
+	  for(let i = 0; i<id("number-container").children.length; i++){
+          id("number-container").children[i].addEventListener("click",function(){
+			  
+			//if selecting is not disabledd
+			if(!disableSelect){
+				//if number is already selected
+				if(this.classList.contains("selected")){
+					//then remove this selection
+					this.classList.remove("selected");
+					selectedNum = null;
+				}
+				else{
+					//deselect all other numbers
+					for(let i=0;i<9;i++){
+						id("number-container").children[i].classList.remove("selected");
+					}
+					//select it and update selectedNum
+					this.classList.add("selected");
+					selectedNum = this;
+					updateMove();
+				}
+			}
+		  });
+	  }
   }
 
   function startGame(){
@@ -54,6 +80,9 @@ const easy = [
 		  qs("body").classList.add("dark");
 	  }
 	}
+	
+	//show number container
+	id("number-container").classList.remove("hidden");
   }
 
   function startTimer(){
@@ -137,6 +166,69 @@ const easy = [
 	  }
   }
 
+  function updateMove(){
+	  //if a tile and a number is selected
+	  if(selectedTile && selectedNum){
+		  //set the tile to the correct number
+		  selectedTile.textContent = selectedNum.textContent;
+
+		  //if number matches the solution key
+		  if(checkCorrect(selectedTile)){
+			  //deselect the tiles
+			  selectedTile.classList.remove("selecetd");
+			  selectedNum.classList.remove("selected");
+
+			  //clear the selected variables
+			  selectedNum = null;
+			  selectedTile = null;
+
+			  //check is user is done
+			   if(checkDone(selectedTile))
+			   {
+				   endGame();
+			   }
+		  }
+		  //if the number does not match the solution key
+		  else{
+			  //disable selecting new numbers for 1 second
+			  disableSelect = true;
+			  //make the tile turn red
+			  selectedTile.classList.add("incorrect");
+
+			  //run after 1 second
+			  setTimeout(function(){
+
+                disableSelect = false;
+
+				 //restore tile colour and remove selected from both
+				 selectedTile.classList.remove("incorrect");
+				 selectedTile.classList.remove("selected");
+				 selectedNum.classList.remove("selected");
+
+				 //clear the tiles text and clear tile 
+				 selectedTile.textContent = "";
+				 selectedTile = null;
+				 selectedNum = null;
+			  },1000);
+		  }
+	 
+		}
+  }
+  
+	  
+  function checkCorrect(tile){
+	  //set solution based on difficulty 
+	  let solution;
+	  if(id("diff-1").checked) solution = easy[1];
+	  else if(id("diff-2").checked) solution = medium[1];
+	  else solution = hard[1];
+
+	  //if tiles number is equal to solution number
+	  if(solution.charAt(tile.id) === tile.textContent) return true;
+		 else return false;
+
+  }
+
   function clearPrevious(){
 	  //Access all the tiles
 	  let tiles = qsa(".tile");
@@ -149,12 +241,14 @@ const easy = [
 	  //remove timer if there
 	  if(timer) clearTimeout(timer);
 
+	  //deselect any numbers from number-container
+	  for(let i=0; i<id("number-container").children.length;i++){
+		  id("number-container").children[i].classList.remove("selected");
+	  }
+
 	  //Clear selected variables
 	  selectedTile = null;
-  }
-
-  function updateMove(){
-
+	  selectedNum = null;
   }
 
   function endGame()
@@ -166,7 +260,16 @@ const easy = [
 	  //Display player lost
 	  if(timereamaining == 0)
 	  alert("you lost!");
+	  else alert("you won!");
 	  //id("timer").textContent = "You lost !";
+  }
+
+  function checkDone(){
+	  let tiles = qsa(".tile");
+	  for(let i=0;i<tiles.length;i++){
+		  if(tiles[i].textContent === "") return false;
+	  }
+	  return true;
   }
 
    //Helper functions
