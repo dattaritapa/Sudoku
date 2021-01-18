@@ -112,7 +112,7 @@ p.incorrect{
 }
 
 .one-step-solve{
-    background-color: burlywood;
+    background-color: rgb(231, 148, 39);
     color: darkblue;
 }
 
@@ -120,9 +120,11 @@ p.incorrect{
     columns: rgb(2, 2, 241);
 }
 
+.solve-all{
+    background-color: rgb(185, 48, 253);
+    color: wheat;
+}
+
 #game-btn > button{
     margin-left: 20px;
 }
-
-
-

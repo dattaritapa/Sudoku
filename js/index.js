@@ -29,7 +29,20 @@ const easy = [
 	  //run when new game buttom is clicked 
 	  id("start-btn").addEventListener("click", startGame);
 
-	  //add event listener to the button
+	//sets theme based on input
+	id("theme-2").addEventListener("change",function(){
+		if(this.checked){
+			qs("body").classList.add("dark");
+		}
+	});
+	
+	id("theme-1").addEventListener("change",function(){
+		if(this.checked){
+			qs("body").classList.remove("dark");
+		}
+	})
+
+	  //add event listener to the solve one button
 	  id("solve-one").addEventListener("click",function(){
 		//check for the selected tile
 		if(selectedTile == null)
@@ -47,6 +60,21 @@ const easy = [
 		 },1000);
 		}
 	});
+
+		//add event listener to the solve-all button
+		id("solve-all").addEventListener("click",function(){
+			clearTimeout(timer);
+			clearTimeout(st);
+			disableSelect = true;
+
+			for(let i =0; i<81 ; i++){
+			   if(id(i).textContent!=easy[1].charAt(i)){
+				   id(i).textContent = easy[1].charAt(i);
+				   id(i).classList.add("solve-all");
+			   }
+			}
+			showAlert();
+		});
 
 	  //add event listener to the numbers and the number container
 	  for(let i = 0; i<id("number-container").children.length; i++){
@@ -76,6 +104,7 @@ const easy = [
 	  }
   }
 
+
   function startGame(){
 	  //Chose difficulty
 	  let board;
@@ -103,25 +132,13 @@ const easy = [
           id("displayTime").classList.add("hidden");
           startTimer();
       }
-
-	  //sets theme based on input
-	  if((id("theme-1").checked == false) && (id("theme-2").checked == false)){
-		  qs("body").classList.remove("dark");
-	  }else{
-	  if(id("theme-1").checked){
-		  qs("body").classList.remove("dark");
-	  }
-	  else{
-		  qs("body").classList.add("dark");
-	  }
-	}
 	
-	//show number container
-	id("number-container").classList.remove("hidden");
+	 //show number container
+	 id("number-container").classList.remove("hidden");
 
-	id("solve-one").classList.remove("hidden");
+	 id("game-btn").classList.remove("hidden");
 
-  }
+   }
 
   function startTimer(){
       //sets time remaining based on input
