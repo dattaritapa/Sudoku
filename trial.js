@@ -22,7 +22,6 @@ const easy = [
   let h =0;
   let m = 0;
   let s = 0;
-  let ms = 0;
   let st;
 
 
@@ -76,13 +75,11 @@ const easy = [
 	  //starts timer
       if(id("time-4").checked){
           id("timer").classList.add("hidden");
-          clearTimeout(st);
           startClock();
       }
       else
 	  {
           id("displayTime").classList.add("hidden");
-          clearTimeout(st);
           startTimer();
       }
 
@@ -197,9 +194,6 @@ const easy = [
               disableSelect = true;
               selectedTile.classList.add("correct");
 
-             // let oldTile = selectedTile;
-              //selectedTile.classList.add("correct");
-
               setTimeout(function(){
                   disableSelect = false;
               selectedTile.classList.remove("correct");
@@ -207,16 +201,11 @@ const easy = [
               selectedNum.classList.remove("selected");
               selectedTile.classList.add("correctTile")
 			  
-			  
-			  
-			  
-
 			  //clear the selected variables
 			  selectedNum = null;
 			  selectedTile = null;
-              },1000);
+			  },1000);
 			  
-
 			  //check is user is done
 			   if(checkDone(selectedTile))
 			   {
@@ -275,6 +264,7 @@ const easy = [
 	  }
 	  //remove timer if there
 	  if(timer) clearTimeout(timer);
+	  if(st) clearTimeout(st);
 
 	  //deselect any numbers from number-container
 	  for(let i=0; i<id("number-container").children.length;i++){
@@ -297,13 +287,11 @@ const easy = [
 	  alert("you lost!");
       else if(id("time-4").checked)
       {
-          //setTimeout();
+		  stopWatch();
           alert("You won! Finished board in "+h+" hours "+m+" minutes and "+s+" seconds!");
       }
       else alert("You won!");
-          
-      
-	  //id("timer").textContent = "You lost !";
+
   }
 
   function checkDone(){
@@ -315,32 +303,52 @@ const easy = [
   }
 
   function startClock(){
-    id("displayTime").classList.remove("hidden");
-    id("displayTime").textContent = "00:00:00";
-    st = setInterval(clock,1000);
+	  id("displayTime").classList.remove("hidden");
+	  resetClock();
+	  st = setInterval(clock,1000);
   }
 
   function clock(){
-     
-      id("displayTime").textContent = (h<10?"0"+h:h) + ":"+(m<10?"0"+m:m)+":" +(s<10?"0"+s:s);
-      s++;
-      if(s==59){
-          s=0;
-          m++;
-      }
-      if(m==59){
-          m=0;
-          h++;
-      }
+	  s++;
+	  if(s/60===1){
+		  s=0;
+		  m++;
+
+		  if(m/60===1){
+			  m=0;
+			  h++;
+		  }
+	  }
+	  if(s<10){
+		  second="0"+s.toString();
+
+	  }else{
+		  second = s;
+	  }
+
+	  if(m<10){
+		  minute="0"+m.toString();
+	  }else{
+		  minute=m;
+	  }
+	  if(h<10){
+		  hour="0"+h.toString();
+	  }else{
+		  hour=h.toString();
+	  }
+	  id("displayTime").textContent = hour+":"+minute+":"+second;
+	  
   }
 
   function resetClock()
   {
+	  clearInterval(st);
       h=0;
       m=0;
       s=0;
-      id("displayTime").textContent = (h<10?"0"+h:h) + ":"+(m<10?"0"+m:m)+":" +(s<10?"0"+s:s);
+      id("displayTime").textContent = "00:00:00";
   }
+
 
    //Helper functions
 
