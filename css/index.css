@@ -110,3 +110,19 @@ p.incorrect{
     background-color: yellowgreen;
     color: black;
 }
+
+.one-step-solve{
+    background-color: burlywood;
+    color: darkblue;
+}
+
+.one-step{
+    columns: rgb(2, 2, 241);
+}
+
+#game-btn > button{
+    margin-left: 20px;
+}
+
+
+

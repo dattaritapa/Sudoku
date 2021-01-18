@@ -29,6 +29,25 @@ const easy = [
 	  //run when new game buttom is clicked 
 	  id("start-btn").addEventListener("click", startGame);
 
+	  //add event listener to the button
+	  id("solve-one").addEventListener("click",function(){
+		//check for the selected tile
+		if(selectedTile == null)
+		alert("Chose a cell!");
+		else {
+			disableSelect = true;
+		    selectedTile.textContent = easy[1].charAt(selectedTile.id);
+			selectedTile.classList.add("one-step");
+			setTimeout(function(){
+				disableSelect = false;
+			
+			selectedTile.classList.add("one-step-solve");
+
+			selectedTile = null;
+		 },1000);
+		}
+	});
+
 	  //add event listener to the numbers and the number container
 	  for(let i = 0; i<id("number-container").children.length; i++){
           id("number-container").children[i].addEventListener("click",function(){
@@ -52,7 +71,8 @@ const easy = [
 					updateMove();
 				}
 			}
-		  });
+		 });
+		 
 	  }
   }
 
@@ -71,6 +91,7 @@ const easy = [
 
 	  //create board
 	  generateBoard(board);
+
 
 	  //starts timer
       if(id("time-4").checked){
@@ -97,6 +118,9 @@ const easy = [
 	
 	//show number container
 	id("number-container").classList.remove("hidden");
+
+	id("solve-one").classList.remove("hidden");
+
   }
 
   function startTimer(){
@@ -281,13 +305,14 @@ const easy = [
 	  //Disable moves and stop timer
 	  disableSelect = true;
 	  clearTimeout(timer);
+	  clearTimeout(st);
 
 	  //Display player lost
 	  if(timereamaining == 0)
 	  alert("you lost!");
       else if(id("time-4").checked)
       {
-		  stopWatch();
+		 // stopWatch();
           alert("You won! Finished board in "+h+" hours "+m+" minutes and "+s+" seconds!");
       }
       else alert("You won!");
