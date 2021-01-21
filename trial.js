@@ -66,14 +66,13 @@ const easy = [
 			clearTimeout(timer);
 			clearTimeout(st);
 			disableSelect = true;
-
+			
 			for(let i =0; i<81 ; i++){
 			   if(id(i).textContent!=easy[1].charAt(i)){
 				   id(i).textContent = easy[1].charAt(i);
 				   id(i).classList.add("solve-all");
 			   }
 			}
-			showAlert();
 		});
 
 	  //add event listener to the numbers and the number container
