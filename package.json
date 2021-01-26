@@ -17,6 +17,9 @@
   },
   "homepage": "https://github.com/dattaritapa/Sudoku#readme",
   "dependencies": {
-    "csv-parser": "^3.0.0"
-  }
+    "csv-parser": "^3.0.0",
+    "csvtojson": "^2.0.10"
+  },
+  "devDependencies": {},
+  "keywords": []
 }
